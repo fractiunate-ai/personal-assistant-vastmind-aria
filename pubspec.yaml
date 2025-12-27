@@ -1,0 +1,51 @@
+name: voice_todo_assistant
+description: Voice AI Todo Assistant - Daily call simulator for todo management
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP client for API calls
+  http: ^1.1.0
+
+  # Audio playback
+  audioplayers: ^5.2.1
+
+  # Local storage for todos
+  shared_preferences: ^2.2.2
+
+  # State management
+  provider: ^6.1.1
+
+  # Local notifications for daily calls
+  flutter_local_notifications: ^16.3.0
+
+  # Path utilities
+  path_provider: ^2.1.1
+
+  # JSON serialization
+  json_annotation: ^4.8.1
+
+  # Permissions
+  permission_handler: ^11.1.0
+
+  # Speech to text (for user voice input)
+  speech_to_text: ^6.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.7
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/audio/
