@@ -40,22 +40,26 @@ class _CallScreenState extends State<CallScreen>
         return Scaffold(
           backgroundColor: _getBackgroundColor(state.phase),
           body: SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 60),
-                _buildCallerAvatar(state),
-                const SizedBox(height: 24),
-                _buildCallerInfo(state),
-                const SizedBox(height: 16),
-                _buildStatusText(state),
-                const Spacer(),
-                if (state.currentMessage.isNotEmpty) _buildMessageBubble(state),
-                if (state.isListening) _buildInputField(provider),
-                const Spacer(),
-                _buildCallControls(provider, state),
-                const SizedBox(height: 48),
-              ],
-            ),
+            child: state.phase == CallPhase.ended
+                ? _buildEndedScreen(state)
+                : Column(
+                    children: [
+                      const SizedBox(height: 60),
+                      _buildCallerAvatar(state),
+                      const SizedBox(height: 24),
+                      _buildCallerInfo(state),
+                      const SizedBox(height: 16),
+                      _buildStatusText(state),
+                      const Spacer(),
+                      if (state.currentMessage.isNotEmpty)
+                        Flexible(child: _buildMessageBubble(state)),
+                      if (state.isListening)
+                        Flexible(child: _buildInputField(provider)),
+                      const Spacer(),
+                      _buildCallControls(provider, state),
+                      const SizedBox(height: 48),
+                    ],
+                  ),
           ),
         );
       },
@@ -71,6 +75,100 @@ class _CallScreenState extends State<CallScreen>
       default:
         return const Color(0xFF16213e);
     }
+  }
+
+  Widget _buildEndedScreen(CallState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey.shade700,
+              ),
+              child: const Icon(
+                Icons.call_end,
+                size: 50,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              'Call Ended',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Thanks for using Todo Assistant',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 16,
+              ),
+            ),
+            if (state.currentMessage.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  state.currentMessage,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+            const SizedBox(height: 48),
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Close',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildCallerAvatar(CallState state) {
